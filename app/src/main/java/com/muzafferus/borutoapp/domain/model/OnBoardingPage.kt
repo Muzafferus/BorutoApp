@@ -4,8 +4,7 @@ import androidx.annotation.DrawableRes
 import com.muzafferus.borutoapp.R
 
 sealed class OnBoardingPage(
-    @DrawableRes
-    val image: Int,
+    @DrawableRes val image: Int,
     val title: String,
     val description: String
 ) {
