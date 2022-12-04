@@ -4,6 +4,7 @@ import android.content.Context
 import com.muzafferus.borutoapp.data.repository.DataStoreOperationsImpl
 import com.muzafferus.borutoapp.data.repository.Repository
 import com.muzafferus.borutoapp.domain.repository.DataStoreOperations
+import com.muzafferus.borutoapp.domain.user_cases.GetAllHeroesUseCase
 import com.muzafferus.borutoapp.domain.user_cases.ReadOnBoardingUseCase
 import com.muzafferus.borutoapp.domain.user_cases.SaveOnBoardingUseCase
 import com.muzafferus.borutoapp.domain.user_cases.UseCases
@@ -33,7 +34,8 @@ object RepositoryModule {
     ): UseCases {
         return UseCases(
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
-            readOnBoardingUseCase = ReadOnBoardingUseCase(repository)
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
+            getAllHeroesUseCase = GetAllHeroesUseCase(repository)
         )
     }
 

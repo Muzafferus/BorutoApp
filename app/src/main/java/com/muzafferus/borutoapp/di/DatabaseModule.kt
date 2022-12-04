@@ -2,7 +2,6 @@ package com.muzafferus.borutoapp.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.muzafferus.borutoapp.data.local.BorutoDatabase
 import com.muzafferus.borutoapp.util.Constants.BORUTO_DATABASE
 import dagger.Module
@@ -20,7 +19,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context
-    ): RoomDatabase {
+    ): BorutoDatabase {
         return Room.databaseBuilder(
             context,
             BorutoDatabase::class.java,
