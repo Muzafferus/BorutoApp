@@ -23,7 +23,7 @@ fun HomeScreen(
             //OnClickTopBarSearch - Navigate to SearchScreen
         })
     }) {
-        RatingWidget(modifier = Modifier.padding(all = LARGE_PADDING), rating = 4.1)
+        RatingWidget(modifier = Modifier.padding(all = LARGE_PADDING), rating = 2.6)
     }
 
 

@@ -30,7 +30,6 @@ fun RatingWidget(
     scaleFactor: Float = 3f,
     spaceBetween: Dp = EXTRA_SMALL_PADDING
 ) {
-
     val result = calculateStars(rating = rating)
 
     val starPathString = stringResource(id = R.string.star_path)
@@ -102,12 +101,11 @@ fun calculateStars(rating: Double): Map<String, Int> {
                 halfFilledStars = 0
             }
         } else {
-            Log.d("RatingWidget", "Invalid rating number")
+            Log.d("RatingWidget", "Invalid rating number.")
         }
-
     }
-    emptyStars = maxStars - (filledStars + halfFilledStars)
 
+    emptyStars = maxStars - (filledStars + halfFilledStars)
     return mapOf(
         "filledStars" to filledStars,
         "halfFilledStars" to halfFilledStars,
@@ -123,11 +121,10 @@ fun FilledStar(
 ) {
     Canvas(modifier = Modifier.size(24.dp)) {
         val canvasSize = size
-
         scale(scale = scaleFactor) {
-            val pathWith = starPathBounds.width
+            val pathWidth = starPathBounds.width
             val pathHeight = starPathBounds.height
-            val left = (canvasSize.width / 2f) - (pathWith / 1.7f)
+            val left = (canvasSize.width / 2f) - (pathWidth / 1.7f)
             val top = (canvasSize.height / 2f) - (pathHeight / 1.7f)
 
             translate(left = left, top = top) {
@@ -148,11 +145,10 @@ fun HalfFilledStar(
 ) {
     Canvas(modifier = Modifier.size(24.dp)) {
         val canvasSize = size
-
         scale(scale = scaleFactor) {
-            val pathWith = starPathBounds.width
+            val pathWidth = starPathBounds.width
             val pathHeight = starPathBounds.height
-            val left = (canvasSize.width / 2f) - (pathWith / 1.7f)
+            val left = (canvasSize.width / 2f) - (pathWidth / 1.7f)
             val top = (canvasSize.height / 2f) - (pathHeight / 1.7f)
 
             translate(left = left, top = top) {
@@ -182,11 +178,10 @@ fun EmptyStar(
 ) {
     Canvas(modifier = Modifier.size(24.dp)) {
         val canvasSize = size
-
         scale(scale = scaleFactor) {
-            val pathWith = starPathBounds.width
+            val pathWidth = starPathBounds.width
             val pathHeight = starPathBounds.height
-            val left = (canvasSize.width / 2f) - (pathWith / 1.7f)
+            val left = (canvasSize.width / 2f) - (pathWidth / 1.7f)
             val top = (canvasSize.height / 2f) - (pathHeight / 1.7f)
 
             translate(left = left, top = top) {
@@ -199,9 +194,53 @@ fun EmptyStar(
     }
 }
 
+@Composable
+@Preview(showBackground = true)
+fun FilledStarPreview() {
+    val starPathString = stringResource(id = R.string.star_path)
+    val starPath = remember {
+        PathParser().parsePathString(pathData = starPathString).toPath()
+    }
+    val starPathBounds = remember {
+        starPath.getBounds()
+    }
+    FilledStar(
+        starPath = starPath,
+        starPathBounds = starPathBounds,
+        scaleFactor = 3f
+    )
+}
 
 @Composable
-@Preview(showSystemUi = true)
-fun FilledStarPreview() {
-    RatingWidget(modifier = Modifier, rating = 1.0)
+@Preview(showBackground = true)
+fun HalfFilledStarPreview() {
+    val starPathString = stringResource(id = R.string.star_path)
+    val starPath = remember {
+        PathParser().parsePathString(pathData = starPathString).toPath()
+    }
+    val starPathBounds = remember {
+        starPath.getBounds()
+    }
+    HalfFilledStar(
+        starPath = starPath,
+        starPathBounds = starPathBounds,
+        scaleFactor = 3f
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun EmptyStarPreview() {
+    val starPathString = stringResource(id = R.string.star_path)
+    val starPath = remember {
+        PathParser().parsePathString(pathData = starPathString).toPath()
+    }
+    val starPathBounds = remember {
+        starPath.getBounds()
+    }
+    EmptyStar(
+        starPath = starPath,
+        starPathBounds = starPathBounds,
+        scaleFactor = 3f
+    )
 }
