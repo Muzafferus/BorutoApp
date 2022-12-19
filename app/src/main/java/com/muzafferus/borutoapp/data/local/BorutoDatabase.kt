@@ -8,7 +8,7 @@ import com.muzafferus.borutoapp.data.local.dao.HeroRemoteKeysDao
 import com.muzafferus.borutoapp.domain.model.Hero
 import com.muzafferus.borutoapp.domain.model.HeroRemoteKeys
 
-@Database(entities = [Hero::class, HeroRemoteKeys::class], version = 1)
+@Database(entities = [Hero::class, HeroRemoteKeys::class], version = 2)
 @TypeConverters(DatabaseConverter::class)
 abstract class BorutoDatabase : RoomDatabase() {
 
