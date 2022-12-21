@@ -4,10 +4,7 @@ import android.content.Context
 import com.muzafferus.borutoapp.data.repository.DataStoreOperationsImpl
 import com.muzafferus.borutoapp.data.repository.Repository
 import com.muzafferus.borutoapp.domain.repository.DataStoreOperations
-import com.muzafferus.borutoapp.domain.user_cases.GetAllHeroesUseCase
-import com.muzafferus.borutoapp.domain.user_cases.ReadOnBoardingUseCase
-import com.muzafferus.borutoapp.domain.user_cases.SaveOnBoardingUseCase
-import com.muzafferus.borutoapp.domain.user_cases.UseCases
+import com.muzafferus.borutoapp.domain.user_cases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +32,8 @@ object RepositoryModule {
         return UseCases(
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
             readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
-            getAllHeroesUseCase = GetAllHeroesUseCase(repository)
+            getAllHeroesUseCase = GetAllHeroesUseCase(repository),
+            searchHeroesUseCase = SearchHeroesUseCase(repository)
         )
     }
 
