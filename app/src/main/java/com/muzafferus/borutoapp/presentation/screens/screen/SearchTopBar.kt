@@ -26,7 +26,7 @@ fun SearchTopBar(
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
-    onCloseClicked: () -> Unit,
+    onCloseClicked: () -> Unit
 ) {
     SearchWidget(
         text = text,
@@ -36,13 +36,12 @@ fun SearchTopBar(
     )
 }
 
-
 @Composable
 fun SearchWidget(
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
-    onCloseClicked: () -> Unit,
+    onCloseClicked: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -59,7 +58,7 @@ fun SearchWidget(
             placeholder = {
                 Text(
                     modifier = Modifier
-                        .alpha(ContentAlpha.medium),
+                        .alpha(alpha = ContentAlpha.medium),
                     text = "Search here...",
                     color = Color.White
                 )
@@ -72,10 +71,11 @@ fun SearchWidget(
                 IconButton(
                     modifier = Modifier
                         .alpha(alpha = ContentAlpha.medium),
-                    onClick = { }) {
+                    onClick = {}
+                ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(id = R.string.search_icon),
+                        contentDescription = stringResource(R.string.search_icon),
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }
@@ -86,12 +86,13 @@ fun SearchWidget(
                         if (text.isNotEmpty()) {
                             onTextChange("")
                         } else {
-                            onCloseClicked
+                            onCloseClicked()
                         }
-                    }) {
+                    }
+                ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.close_icon),
+                        contentDescription = stringResource(R.string.close_icon),
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }

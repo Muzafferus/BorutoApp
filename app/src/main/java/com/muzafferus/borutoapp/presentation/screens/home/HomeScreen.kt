@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
+import com.muzafferus.borutoapp.navigation.Screen
 import com.muzafferus.borutoapp.presentation.common.ListContent
 
 @ExperimentalCoilApi
@@ -19,7 +20,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             HomeTopBar(onSearchClicked = {
-                //OnClickTopBarSearch - Navigate to SearchScreen
+                navController.navigate(Screen.Search.route)
             })
         },
         content = {
