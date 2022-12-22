@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.BottomSheetValue.Collapsed
 import androidx.compose.material.BottomSheetValue.Expanded
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -27,6 +28,7 @@ import com.muzafferus.borutoapp.presentation.components.OrderedList
 import com.muzafferus.borutoapp.ui.theme.*
 import com.muzafferus.borutoapp.util.Constants.ABOUT_TEXT_MAX_LINES
 import com.muzafferus.borutoapp.util.Constants.BASE_URL
+import com.muzafferus.borutoapp.util.Constants.MIN_BACKGROUND_IMAGE_HEIGHT
 
 @ExperimentalCoilApi
 @ExperimentalMaterialApi
@@ -39,6 +41,8 @@ fun DetailsContent(
         bottomSheetState = rememberBottomSheetState(initialValue = Expanded)
     )
 
+    val currentSheetFraction = scaffoldState.currentSheetFraction
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = MIN_SHEET_HEIGHT,
@@ -49,6 +53,7 @@ fun DetailsContent(
             selectedHero?.let { hero ->
                 BackgroundContent(
                     heroImage = hero.image,
+                    imageFraction = currentSheetFraction,
                     onCloseClicked = {
                         navController.popBackStack()
                     }
@@ -65,7 +70,6 @@ fun BottomSheetContent(
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = MaterialTheme.colors.titleColor
 ) {
-
     Column(
         modifier = Modifier
             .background(sheetBackgroundColor)
@@ -86,7 +90,8 @@ fun BottomSheetContent(
                 tint = contentColor
             )
             Text(
-                modifier = Modifier.weight(8f),
+                modifier = Modifier
+                    .weight(8f),
                 text = selectedHero.name,
                 color = contentColor,
                 fontSize = MaterialTheme.typography.h4.fontSize,
@@ -103,27 +108,27 @@ fun BottomSheetContent(
                 icon = painterResource(id = R.drawable.ic_bolt),
                 iconColor = infoBoxIconColor,
                 bigText = "${selectedHero.power}",
-                smallText = stringResource(id = R.string.power),
+                smallText = stringResource(R.string.power),
                 textColor = contentColor
             )
             InfoBox(
                 icon = painterResource(id = R.drawable.ic_calendar),
                 iconColor = infoBoxIconColor,
                 bigText = selectedHero.month,
-                smallText = stringResource(id = R.string.month),
+                smallText = stringResource(R.string.month),
                 textColor = contentColor
             )
             InfoBox(
                 icon = painterResource(id = R.drawable.ic_cake),
                 iconColor = infoBoxIconColor,
                 bigText = selectedHero.day,
-                smallText = stringResource(id = R.string.birthday),
+                smallText = stringResource(R.string.birthday),
                 textColor = contentColor
             )
         }
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.about),
+            text = stringResource(R.string.about),
             color = contentColor,
             fontSize = MaterialTheme.typography.subtitle1.fontSize,
             fontWeight = FontWeight.Bold
@@ -181,7 +186,7 @@ fun BackgroundContent(
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(fraction = imageFraction)
+                .fillMaxHeight(fraction = imageFraction + MIN_BACKGROUND_IMAGE_HEIGHT)
                 .align(Alignment.TopStart),
             painter = painter,
             contentDescription = stringResource(id = R.string.hero_image),
@@ -206,6 +211,21 @@ fun BackgroundContent(
     }
 }
 
+@ExperimentalMaterialApi
+val BottomSheetScaffoldState.currentSheetFraction: Float
+    get() {
+        val fraction = bottomSheetState.progress.fraction
+        val targetValue = bottomSheetState.targetValue
+        val currentValue = bottomSheetState.currentValue
+
+        return when {
+            currentValue == Collapsed && targetValue == Collapsed -> 1f
+            currentValue == Expanded && targetValue == Expanded -> 0f
+            currentValue == Collapsed && targetValue == Expanded -> 1f - fraction
+            currentValue == Expanded && targetValue == Collapsed -> 0f + fraction
+            else -> fraction
+        }
+    }
 
 @Composable
 @Preview
