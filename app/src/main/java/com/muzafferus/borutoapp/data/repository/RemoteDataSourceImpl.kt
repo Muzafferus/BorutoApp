@@ -21,7 +21,6 @@ class RemoteDataSourceImpl(
 
     private val heroDao = borutoDatabase.heroDao()
 
-
     override fun getAllHeroes(): Flow<PagingData<Hero>> {
         val pagingSourceFactory = { heroDao.getAllHeroes() }
         return Pager(

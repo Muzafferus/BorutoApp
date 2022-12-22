@@ -19,7 +19,7 @@ class Repository @Inject constructor(
     }
 
     fun searchHeroes(query: String): Flow<PagingData<Hero>> {
-        return remote.searchHeroes(query)
+        return remote.searchHeroes(query = query)
     }
 
     suspend fun getSelectedHero(heroId: Int): Hero {
@@ -27,10 +27,11 @@ class Repository @Inject constructor(
     }
 
     suspend fun saveOnBoardingState(completed: Boolean) {
-        dataStore.saveOnBoardingState(completed)
+        dataStore.saveOnBoardingState(completed = completed)
     }
 
     fun readOnBoardingState(): Flow<Boolean> {
         return dataStore.readOnBoardingState()
     }
+
 }

@@ -26,7 +26,7 @@ class HeroRemoteMediator @Inject constructor(
     override suspend fun initialize(): InitializeAction {
         val currentTime = System.currentTimeMillis()
         val lastUpdated = heroRemoteKeysDao.getRemoteKeys(heroId = 1)?.lastUpdated ?: 0L
-        val cacheTimeout = 1440 //ONE DAY
+        val cacheTimeout = 1440
         Log.e("RemoteMediator", "Current Time: ${parseMillis(currentTime)}")
         Log.e("RemoteMediator", "Last Update Time: ${parseMillis(lastUpdated)}")
 
@@ -45,19 +45,19 @@ class HeroRemoteMediator @Inject constructor(
         return try {
             val page = when (loadType) {
                 LoadType.REFRESH -> {
-                    val remoteKeys = getRemoteKeyClosestCurrentPosition(state)
+                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                     remoteKeys?.nextPage?.minus(1) ?: 1
                 }
-                LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeysForFirstItem(state)
+                LoadType.PREPEND -> {
+                    val remoteKeys = getRemoteKeyForFirstItem(state)
                     val prevPage = remoteKeys?.prevPage
                         ?: return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys != null
                         )
                     prevPage
                 }
-                LoadType.PREPEND -> {
-                    val remoteKeys = getRemoteKeysForLastItem(state)
+                LoadType.APPEND -> {
+                    val remoteKeys = getRemoteKeyForLastItem(state)
                     val nextPage = remoteKeys?.nextPage
                         ?: return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys != null
@@ -89,11 +89,11 @@ class HeroRemoteMediator @Inject constructor(
             }
             MediatorResult.Success(endOfPaginationReached = response.nextPage == null)
         } catch (e: Exception) {
-            MediatorResult.Error(e)
+            return MediatorResult.Error(e)
         }
     }
 
-    private suspend fun getRemoteKeyClosestCurrentPosition(
+    private suspend fun getRemoteKeyClosestToCurrentPosition(
         state: PagingState<Int, Hero>
     ): HeroRemoteKeys? {
         return state.anchorPosition?.let { position ->
@@ -103,7 +103,7 @@ class HeroRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeysForFirstItem(
+    private suspend fun getRemoteKeyForFirstItem(
         state: PagingState<Int, Hero>
     ): HeroRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
@@ -112,8 +112,9 @@ class HeroRemoteMediator @Inject constructor(
             }
     }
 
-
-    private suspend fun getRemoteKeysForLastItem(state: PagingState<Int, Hero>): HeroRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(
+        state: PagingState<Int, Hero>
+    ): HeroRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { hero ->
                 heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)

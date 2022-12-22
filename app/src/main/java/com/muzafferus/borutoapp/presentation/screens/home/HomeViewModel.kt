@@ -10,8 +10,6 @@ class HomeViewModel @Inject constructor(
     private val useCases: UseCases
 ) : ViewModel(){
 
-    val getAllHeroes = useCases.getAllHeroesUseCase.invoke()
-
-
+    val getAllHeroes = useCases.getAllHeroesUseCase()
 
 }
