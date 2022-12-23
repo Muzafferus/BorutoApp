@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,33 +43,26 @@ fun RatingWidget(
     }
 
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(spaceBetween)
+        modifier = modifier, horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
         result["filledStars"]?.let {
             repeat(it) {
                 FilledStar(
-                    starPath = starPath,
-                    starPathBounds = starPathBounds,
-                    scaleFactor = scaleFactor
+                    starPath = starPath, starPathBounds = starPathBounds, scaleFactor = scaleFactor
                 )
             }
         }
         result["halfFilledStars"]?.let {
             repeat(it) {
                 HalfFilledStar(
-                    starPath = starPath,
-                    starPathBounds = starPathBounds,
-                    scaleFactor = scaleFactor
+                    starPath = starPath, starPathBounds = starPathBounds, scaleFactor = scaleFactor
                 )
             }
         }
         result["emptyStars"]?.let {
             repeat(it) {
                 EmptyStar(
-                    starPath = starPath,
-                    starPathBounds = starPathBounds,
-                    scaleFactor = scaleFactor
+                    starPath = starPath, starPathBounds = starPathBounds, scaleFactor = scaleFactor
                 )
             }
         }
@@ -83,9 +78,7 @@ fun calculateStars(rating: Double): Map<String, Int> {
     var emptyStars by remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = rating) {
-        val (firstNumber, lastNumber) = rating.toString()
-            .split(".")
-            .map { it.toInt() }
+        val (firstNumber, lastNumber) = rating.toString().split(".").map { it.toInt() }
 
         if (firstNumber in 0..5 && lastNumber in 0..9) {
             filledStars = firstNumber
@@ -115,11 +108,13 @@ fun calculateStars(rating: Double): Map<String, Int> {
 
 @Composable
 fun FilledStar(
-    starPath: Path,
-    starPathBounds: Rect,
-    scaleFactor: Float
+    starPath: Path, starPathBounds: Rect, scaleFactor: Float
 ) {
-    Canvas(modifier = Modifier.size(24.dp)) {
+    Canvas(modifier = Modifier
+        .size(24.dp)
+        .semantics {
+            contentDescription = "FilledStar"
+        }) {
         val canvasSize = size
         scale(scale = scaleFactor) {
             val pathWidth = starPathBounds.width
@@ -129,8 +124,7 @@ fun FilledStar(
 
             translate(left = left, top = top) {
                 drawPath(
-                    path = starPath,
-                    color = StarColor
+                    path = starPath, color = StarColor
                 )
             }
         }
@@ -139,11 +133,13 @@ fun FilledStar(
 
 @Composable
 fun HalfFilledStar(
-    starPath: Path,
-    starPathBounds: Rect,
-    scaleFactor: Float
+    starPath: Path, starPathBounds: Rect, scaleFactor: Float
 ) {
-    Canvas(modifier = Modifier.size(24.dp)) {
+    Canvas(modifier = Modifier
+        .size(24.dp)
+        .semantics {
+            contentDescription = "HalfFilledStar"
+        }) {
         val canvasSize = size
         scale(scale = scaleFactor) {
             val pathWidth = starPathBounds.width
@@ -153,13 +149,11 @@ fun HalfFilledStar(
 
             translate(left = left, top = top) {
                 drawPath(
-                    path = starPath,
-                    color = LightGray.copy(alpha = 0.5f)
+                    path = starPath, color = LightGray.copy(alpha = 0.5f)
                 )
                 clipPath(path = starPath) {
                     drawRect(
-                        color = StarColor,
-                        size = Size(
+                        color = StarColor, size = Size(
                             width = starPathBounds.maxDimension / 1.7f,
                             height = starPathBounds.maxDimension * scaleFactor
                         )
@@ -172,11 +166,14 @@ fun HalfFilledStar(
 
 @Composable
 fun EmptyStar(
-    starPath: Path,
-    starPathBounds: Rect,
-    scaleFactor: Float
+    starPath: Path, starPathBounds: Rect, scaleFactor: Float
 ) {
-    Canvas(modifier = Modifier.size(24.dp)) {
+    Canvas(
+        modifier = Modifier
+            .size(24.dp)
+            .semantics {
+                contentDescription = "EmptyStar"
+            }) {
         val canvasSize = size
         scale(scale = scaleFactor) {
             val pathWidth = starPathBounds.width
@@ -186,8 +183,7 @@ fun EmptyStar(
 
             translate(left = left, top = top) {
                 drawPath(
-                    path = starPath,
-                    color = LightGray.copy(alpha = 0.5f)
+                    path = starPath, color = LightGray.copy(alpha = 0.5f)
                 )
             }
         }
@@ -205,9 +201,7 @@ fun FilledStarPreview() {
         starPath.getBounds()
     }
     FilledStar(
-        starPath = starPath,
-        starPathBounds = starPathBounds,
-        scaleFactor = 3f
+        starPath = starPath, starPathBounds = starPathBounds, scaleFactor = 3f
     )
 }
 
@@ -222,9 +216,7 @@ fun HalfFilledStarPreview() {
         starPath.getBounds()
     }
     HalfFilledStar(
-        starPath = starPath,
-        starPathBounds = starPathBounds,
-        scaleFactor = 3f
+        starPath = starPath, starPathBounds = starPathBounds, scaleFactor = 3f
     )
 }
 
@@ -239,8 +231,6 @@ fun EmptyStarPreview() {
         starPath.getBounds()
     }
     EmptyStar(
-        starPath = starPath,
-        starPathBounds = starPathBounds,
-        scaleFactor = 3f
+        starPath = starPath, starPathBounds = starPathBounds, scaleFactor = 3f
     )
 }
