@@ -396,7 +396,20 @@ class FakeBorutoApi2 : BorutoApi {
         )
     )
 
+    fun clearData() {
+        page1 = emptyList()
+    }
+
+    private var exception = false
+
+    fun addException() {
+        exception = true
+    }
+
     override suspend fun getAllHeroes(page: Int): ApiResponse {
+        if (exception) {
+            throw IOException()
+        }
         require(page in 1..5)
         return ApiResponse(
             success = true,

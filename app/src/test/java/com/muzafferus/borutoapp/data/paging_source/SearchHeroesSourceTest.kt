@@ -20,7 +20,7 @@ class SearchHeroesSourceTest {
 
 
     @Before
-    fun setUp() {
+    fun setup() {
         borutoApi = FakeBorutoApi()
         heroes = listOf(
             Hero(
