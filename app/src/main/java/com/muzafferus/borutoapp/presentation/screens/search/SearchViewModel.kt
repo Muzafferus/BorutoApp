@@ -1,4 +1,4 @@
-package com.muzafferus.borutoapp.presentation.screens.screen
+package com.muzafferus.borutoapp.presentation.screens.search
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

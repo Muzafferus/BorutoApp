@@ -1,4 +1,4 @@
-package com.muzafferus.borutoapp.presentation.screens.screen
+package com.muzafferus.borutoapp.presentation.screens.search
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
