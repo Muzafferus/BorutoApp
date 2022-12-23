@@ -12,12 +12,10 @@ import com.muzafferus.borutoapp.domain.model.Hero
 import com.muzafferus.borutoapp.domain.model.HeroRemoteKeys
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 @ExperimentalPagingApi
-class HeroRemoteMediator @Inject constructor(
-    private val borutoApi: BorutoApi,
-    private val borutoDatabase: BorutoDatabase
+class HeroRemoteMediator(
+    private val borutoApi: BorutoApi, private val borutoDatabase: BorutoDatabase
 ) : RemoteMediator<Int, Hero>() {
 
     private val heroDao = borutoDatabase.heroDao()
@@ -50,18 +48,16 @@ class HeroRemoteMediator @Inject constructor(
                 }
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.prevPage
-                        ?: return MediatorResult.Success(
-                            endOfPaginationReached = remoteKeys != null
-                        )
+                    val prevPage = remoteKeys?.prevPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
                     prevPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage
-                        ?: return MediatorResult.Success(
-                            endOfPaginationReached = remoteKeys != null
-                        )
+                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
                     nextPage
                 }
             }
@@ -106,19 +102,17 @@ class HeroRemoteMediator @Inject constructor(
     private suspend fun getRemoteKeyForFirstItem(
         state: PagingState<Int, Hero>
     ): HeroRemoteKeys? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { hero ->
-                heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)
-            }
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { hero ->
+            heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)
+        }
     }
 
     private suspend fun getRemoteKeyForLastItem(
         state: PagingState<Int, Hero>
     ): HeroRemoteKeys? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { hero ->
-                heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)
-            }
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { hero ->
+            heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)
+        }
     }
 
     private fun parseMillis(millis: Long): String {
